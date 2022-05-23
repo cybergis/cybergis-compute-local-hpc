@@ -1,3 +1,6 @@
 [submodule "slurm-docker-cluster-sub"]
 	path = slurm-docker-cluster-sub
 	url = https://github.com/giovtorres/slurm-docker-cluster.git
+[submodule "slurm-docker-cluster"]
+	path = slurm-docker-cluster
+	url = https://github.com/giovtorres/slurm-docker-cluster.git
