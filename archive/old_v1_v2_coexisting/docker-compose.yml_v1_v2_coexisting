@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  nginx:
+    image: linuxserver/swag:1.22.0-ls107
+    restart: always
+    depends_on:
+      - job_supervisor
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx_v1_v2.conf:/config/nginx/site-confs/default
+      - nginx_volume:/config
+    extra_hosts:
+      # docker > 20.10
+      - "host.docker.internal:host-gateway"
+    environment:
+      # Production
+      #- URL=cgjobsup.cigi.illinois.edu
+      # Dev
+      - URL=cgjobsup-dev.cigi.illinois.edu
+      - EMAIL=help@cybergis.org
+  
+  job_supervisor:
+    image: cybergisx/job_supervisor_v2:62ca2797cc26
+    restart: on-failure
+    depends_on:
+      - db
+    volumes:
+      - ./:/job_supervisor:rw
+    privileged: true
+    # Dev
+    ports:
+      - "3030:3030"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    environment:
+      - OPENCONNECT_PASSWORD=
+      - OPENCONNECT_USER=
+      - OPENCONNECT_AUTHGROUP=
+      - OPENCONNECT_URL=
+      - OPENCONNECT_MFA_CODE=
+  db:
+    image: mysql:8.0.25
+    cap_add:
+      # https://stackoverflow.com/questions/55559386/how-to-fix-mbind-operation-not-permitted-in-mysql-error-log
+      - SYS_NICE  # CAP_SYS_NICE
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=cybergis_compute
+      - MYSQL_USER=cybergis_compute
+      - MYSQL_PASSWORD=123456
+    # Dev
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+volumes:
+  nginx_volume:
+networks:
+  # use pre-existing network
+  default:
+    name: my-cybergis-compute-network
+    external: true
+

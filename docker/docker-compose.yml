@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  nginx:
+    image: linuxserver/letsencrypt:0.39.0-ls73
+    volumes:
+      - ./docker/nginx.conf:/config/nginx/site-confs/default
+      - nginx_volume:/config
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - URL=cgjobsup.cigi.illinois.edu
+      - EMAIL=zimox2@illinois.edu
+
+  job_supervisor:
+    image: zimoxiao/job_supervisor:latest
+    restart: on-failure
+    volumes:
+    - ../:/job_supervisor:rw
+    command: ["/job_supervisor/docker/docker-entrypoint.sh"]
+    privileged: true
+    ports:
+      - "3030:3030"
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=0
+    environment:
+      OPENCONNECT_PASSWORD: ${OPENCONNECT_PASSWORD}
+      OPENCONNECT_USER: ${OPENCONNECT_USER}
+      OPENCONNECT_AUTHGROUP: ${OPENCONNECT_AUTHGROUP}
+      OPENCONNECT_URL: ${OPENCONNECT_URL}
+      OPENCONNECT_MFA_CODE: ${OPENCONNECT_MFA_CODE}
+
+volumes:
+  nginx_volume:

@@ -1,0 +1,69 @@
+{
+    "python": {
+        "dockerfile": "",
+        "dockerhub": "",
+        "hpc_path": {
+            "keeling_community": "/data/keeling/a/cigi-gisolve/simages/python.sif",
+            "expanse_community": "/home/cybergis/SUMMA_IMAGE/python.sif",
+            "bridges_community_gpu": "/jet/home/cybergis/image/python.sif"
+        }
+    },
+    "cybergisx-0.4": {
+        "dockerfile": "",
+        "dockerhub": "",
+        "hpc_path": {
+            "expanse_community": "/home/cybergis/SUMMA_IMAGE/cybergisx_0.4.simg",
+            "keeling_community": "/data/keeling/a/cigi-gisolve/simages/cybergisx_0.4.simg",
+	    "bridges_community_gpu": "/jet/home/cybergis/image/cybergisx_0.4.simg"
+        }
+    },
+    "cjw-eb": {
+        "dockerfile": "",
+        "dockerhub": "",
+        "hpc_path": {
+            "keeling_community": "/data/keeling/a/cigi-gisolve/simages/cjw-eb.simg",
+            "bridges_community": "/jet/home/cybergis/image/cybergisx_0.4.simg"
+        },
+        "mount": {
+            "keeling_community": {
+                "/data/cigi/cybergisx-easybuild": "/data/cigi/cybergisx-easybuild"
+            }
+        }
+    },
+    "mpich": {
+        "dockerfile": "",
+        "dockerhub": "",
+        "hpc_path": {
+            "keeling_community": "/data/keeling/a/cigi-gisolve/simages/mpich34.simg",
+            "expanse_community": "/home/cybergis/SUMMA_IMAGE/mpich34.simg"
+        }
+    },
+    "summa-3.0.3": {
+       "dockerfile": "",
+       "dockerhub": "",
+       "hpc_path": {
+            "keeling_community": "/data/keeling/a/cigi-gisolve/simages/summa3_xenial.simg",
+            "expanse_community": "/home/cybergis/SUMMA_IMAGE/summa3_xenial.simg"
+        }
+    },
+   "wrfhydro-5.x": {
+       "dockerfile": "",
+       "dockerhub": "",
+       "hpc_path": {
+            "keeling_community": "/data/keeling/a/cigi-gisolve/simages/wrfhydro_bionic.simg",
+            "expanse_community": "/home/cybergis/SUMMA_IMAGE/wrfhydro_bionic.simg"
+        }
+    },
+    "datafusion": {
+        "dockerfile": "",
+        "dockerhub": "",
+        "hpc_path": {
+            "bridges_community_gpu": "/jet/home/cybergis/image/fusion_env_v1.sif"
+        },
+        "mount": {
+            "bridges_community_gpu": {
+                "/jet/home/cybergis/data/datafusion": "/datafusion"
+            }
+        }
+    }
+}
