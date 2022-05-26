@@ -11,10 +11,10 @@
         "password": null
     },
     "mysql": {
-        "host": "mysql",
+        "host": "0.0.0.0",
         "port": 3306,
         "database": "slurm_acct_db",
-        "username": "slurm",
+        "username": "root",
         "password": "password"
     },
     "local_file_system": {

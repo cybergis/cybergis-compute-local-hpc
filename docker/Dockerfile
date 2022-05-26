@@ -4,7 +4,8 @@ RUN set -ex; \
     bash nettle iptables redis dumb-init openrc \
     python3 python3-dev tzdata pkgconfig build-base \
     git libgit2-dev krb5-dev py-pip py-cryptography openssh \
-    zip unzip
+    zip unzip \
+
 RUN python3 -m pip install globus_sdk
 RUN set -xe; \
     apk add --no-cache openconnect -X http://dl-cdn.alpinelinux.org/alpine/edge/community
