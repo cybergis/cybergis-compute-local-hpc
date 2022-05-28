@@ -11,7 +11,7 @@
         "password": null
     },
     "mysql": {
-        "host": "0.0.0.0",
+        "host": "mysql",
         "port": 3306,
         "database": "slurm_acct_db",
         "username": "root",

@@ -1,4 +1,4 @@
-FROM node:16.2.0-alpine3.13
+FROM centos:7
 
 LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docker-cluster" \
       org.opencontainers.image.title="slurm-docker-cluster" \
@@ -8,6 +8,7 @@ LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docke
 
 ARG SLURM_TAG=slurm-19-05-1-2
 ARG GOSU_VERSION=1.11
+
 RUN set -ex \
     && yum makecache fast \
     && yum -y update \
@@ -87,16 +88,7 @@ RUN set -x \
 COPY slurm.conf /etc/slurm/slurm.conf
 COPY slurmdbd.conf /etc/slurm/slurmdbd.conf
 
-RUN set -ex; \
-    apk add --update --no-cache \
-    bash nettle iptables redis dumb-init openrc \
-    python3 python3-dev tzdata pkgconfig build-base \
-    git libgit2-dev krb5-dev py-pip py-cryptography openssh \
-    zip unzip \
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-RUN python3 -m pip install globus_sdk
-RUN set -xe; \
-    apk add --no-cache openconnect -X http://dl-cdn.alpinelinux.org/alpine/edge/community
-EXPOSE 3030
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["/job_supervisor/docker/docker-entrypoint.sh"]
+CMD ["slurmdbd"]
