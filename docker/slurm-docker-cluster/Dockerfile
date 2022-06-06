@@ -1,4 +1,4 @@
-FROM centos:7
+FROM centos/systemd
 
 LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docker-cluster" \
       org.opencontainers.image.title="slurm-docker-cluster" \
