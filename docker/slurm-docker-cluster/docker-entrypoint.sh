@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-
 if [ "$1" = "slurmdbd" ]
 then
     echo "---> Starting the MUNGE Authentication service (munged) ..."
@@ -56,5 +55,4 @@ then
     echo "---> Starting the Slurm Node Daemon (slurmd) ..."
     exec /usr/sbin/slurmd -Dvvv
 fi
-
 exec "$@"

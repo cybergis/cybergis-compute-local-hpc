@@ -398,6 +398,15 @@ app.get('/container', function (req, res) {
     res.json({ container: parseContainer(containerConfigMap) })
 })
 
+/**
+  * @openapi
+  * /maintainer:
+  *  get:
+  *      description: Returns code git repo
+  *      responses:
+  *          200:
+  *              description: Returns code git repo
+  */
 app.get('/git', async function (req, res) {
     var parseGit = async (dest: Git[]) => {
         var out = {}
@@ -422,7 +431,23 @@ app.get('/git', async function (req, res) {
     res.json({ git: await parseGit(gits) })
 })
 
-// TODO: remove after new versions, back compatibility
+/**
+  * @openapi
+  * /file:
+  *  get:
+  *      description: Returns file/folder at specified file url
+  *      responses:
+  *          200:
+  *              description: Returns file at specified file url
+  *          402:
+  *              description: invalid input
+  *          401:
+  *              description: invalid access token
+  *          402:
+  *              description: job is not finished, please try it later
+  *          402 :
+  *              description: cannot get file at specified url
+  */
 app.get('/file', async function (req: any, res) {
     var body = req.body
     var errors = requestErrors(validator.validate(body, schemas.getFile))
@@ -471,7 +496,21 @@ app.get('/file', async function (req: any, res) {
     }
 })
 
-// file
+/**
+  * @openapi
+  * /file:
+  *  get:
+  *      description: Upload fil
+  *      responses:
+  *          200:
+  *              description: Returns url of uploaded file
+  *          402:
+  *              description: invalid input
+  *          401:
+  *              description: invalid access token
+  *          402:
+  *              description: Upload failed
+  */
 app.post('/file', async function (req: any, res) {
     if (res.statusCode == 402) return
 
@@ -507,6 +546,23 @@ app.post('/file', async function (req: any, res) {
     }
 })
 
+/**
+  * @openapi
+  * /file:
+  *  get:
+  *      description: Returns compressed directory at specified url
+  *      responses:
+  *          200:
+  *              description: Returns compressed directory
+  *          402:
+  *              description: invalid input
+  *          401:
+  *              description: invalid access token
+  *          402:
+  *              description: job is not finished, please try it later
+  *          402 :
+  *              description: cannot get folder at specified url
+  */
 app.get('/file/result-folder/direct-download', async function (req: any, res) {
     var body = req.body
     var errors = requestErrors(validator.validate(body, schemas.downloadResultFolderLocal))
@@ -542,6 +598,25 @@ app.get('/file/result-folder/direct-download', async function (req: any, res) {
     }
 })
 
+/**
+  * @openapi
+  * /file:
+  *  get:
+  *      description: Returns compressed directory at specified globus url
+  *      responses:
+  *          200:
+  *              description: Returns compressed globus directory
+  *          402:
+  *              description: invalid input
+  *          401:
+  *              description: invalid access token
+  *          402:
+  *              description: job is not finished, please try it later
+  *          402:
+  *              description: invalid url
+  *          402 :
+  *              description: cannot get folder at specified url
+  */
 app.get('/file/result-folder/globus-download', async function (req: any, res) {
     var body = req.body
     var errors = requestErrors(validator.validate(body, schemas.downloadResultFolderGlobus))
@@ -594,7 +669,7 @@ app.get('/file/result-folder/globus-download', async function (req: any, res) {
         }
     })
 
-// globus
+
 app.post('/globus-util/jupyter/upload', async function (req, res) {
     var body = req.body
     var errors = requestErrors(validator.validate(body, schemas.user))
@@ -746,6 +821,7 @@ app.put('/job/:jobId', async function (req, res) {
     res.json(Helper.job2object(job))
 })
 
+
 app.post('/job/:jobId/submit', async function (req, res) {
     var body = req.body
     var errors = requestErrors(validator.validate(body, schemas.getJob))
@@ -784,10 +860,15 @@ app.post('/job/:jobId/submit', async function (req, res) {
         // update status
         var connection = await db.connect()
         job.queuedAt = new Date()
+        const updateJobTo: any = { queuedAt: job.queuedAt }
+        if (job.hpc == 'instant_hpc') {
+            updateJobTo.finishedAt = new Date()
+            updateJobTo.isFailed = false
+        }
         await connection.createQueryBuilder()
             .update(Job)
             .where('id = :id', { id:  job.id })
-            .set({ queuedAt: job.queuedAt })
+            .set(updateJobTo)
             .execute()
     } catch (e) {
         res.json({ error: e.toString() }); res.status(402)

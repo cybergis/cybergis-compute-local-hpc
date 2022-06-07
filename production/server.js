@@ -916,7 +916,7 @@ app.put('/job/:jobId', function (req, res) {
 });
 app.post('/job/:jobId/submit', function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var body, errors, job, e_14, connection, e_15;
+        var body, errors, job, e_14, connection, updateJobTo, e_15;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -968,10 +968,15 @@ app.post('/job/:jobId/submit', function (req, res) {
                 case 8:
                     connection = _a.sent();
                     job.queuedAt = new Date();
+                    updateJobTo = { queuedAt: job.queuedAt };
+                    if (job.hpc == 'instant_hpc') {
+                        updateJobTo.finishedAt = new Date();
+                        updateJobTo.isFailed = false;
+                    }
                     return [4, connection.createQueryBuilder()
                             .update(Job_1.Job)
                             .where('id = :id', { id: job.id })
-                            .set({ queuedAt: job.queuedAt })
+                            .set(updateJobTo)
                             .execute()];
                 case 9:
                     _a.sent();

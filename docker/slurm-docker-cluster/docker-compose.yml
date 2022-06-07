@@ -1,25 +1,6 @@
 version: "2.2"
 
 services:
-  openssh-server:
-      image: linuxserver/openssh-server
-      container_name: openssh-server
-      hostname: openssh-server
-      environment:
-        - PUID=1000
-        - PGID=1000
-        - TZ=Europe/London
-        - PASSWORD_ACCESS=true
-        - SUDO_ACCESS=false
-        - USER_PASSWORD=tunnel
-        - USER_NAME=tunnel
-      volumes:
-        - openssh-data:/config
-      ports:
-        - "2222:22"
-      restart: unless-stopped
-      networks:
-        - slurmnet
   mysql:
     image: mysql:5.7
     hostname: mysql
@@ -30,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_PASSWORD: password
     ports:
-      - "3306:22"
+      - "3306:3306"
     volumes:
       - var_lib_mysql:/var/lib/mysql
     networks:
@@ -38,7 +19,7 @@ services:
 
   slurmdbd:
     image: slurm-docker-cluster:19.05.1
-    command: ["slurmdbd"]
+    entrypoint: ["/usr/local/bin/docker-entrypoint.sh","slurmdbd"]
     container_name: slurmdbd
     hostname: slurmdbd
     volumes:
@@ -54,7 +35,7 @@ services:
 
   slurmctld:
     image: slurm-docker-cluster:19.05.1
-    command: ["slurmctld"]
+    entrypoint: ["/usr/local/bin/docker-entrypoint.sh","slurmctld"]
     container_name: slurmctld
     hostname: slurmctld
     volumes:
@@ -63,7 +44,7 @@ services:
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
     ports:
-      - "6817:22"
+      - "2222:22"
     depends_on:
       - "slurmdbd"
     networks:
@@ -71,7 +52,7 @@ services:
 
   c1:
     image: slurm-docker-cluster:19.05.1
-    command: ["slurmd"]
+    entrypoint: ["/usr/local/bin/docker-entrypoint.sh","slurmd"]
     hostname: c1
     container_name: c1
     volumes:
@@ -88,7 +69,7 @@ services:
 
   c2:
     image: slurm-docker-cluster:19.05.1
-    command: ["slurmd"]
+    entrypoint: ["/usr/local/bin/docker-entrypoint.sh","slurmd"]
     hostname: c2
     container_name: c2
     volumes:
@@ -109,7 +90,6 @@ volumes:
   slurm_jobdir:
   var_lib_mysql:
   var_log_slurm:
-  openssh-data:
 
 networks:
   slurmnet:

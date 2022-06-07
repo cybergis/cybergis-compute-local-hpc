@@ -1,4 +1,4 @@
-FROM centos/systemd
+FROM centos/systemd:latest
 
 LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docker-cluster" \
       org.opencontainers.image.title="slurm-docker-cluster" \
@@ -89,6 +89,15 @@ COPY slurm.conf /etc/slurm/slurm.conf
 COPY slurmdbd.conf /etc/slurm/slurmdbd.conf
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
-CMD ["slurmdbd"]
+RUN yum -y update; yum clean all
+RUN yum -y install openssh-server passwd; yum clean all
+ADD ./start.sh /start.sh
+RUN mkdir /var/run/sshd
+
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' 
+
+RUN chmod 755 /start.sh
+EXPOSE 22
+RUN ./start.sh
+ENTRYPOINT ["/usr/sbin/sshd", "-D"]
