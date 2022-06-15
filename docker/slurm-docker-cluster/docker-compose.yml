@@ -43,8 +43,9 @@ services:
       - etc_slurm:/etc/slurm
       - slurm_jobdir:/data
       - var_log_slurm:/var/log/slurm
+      - ./ssh:/home/user/.ssh
     ports:
-      - "2222:22"
+      - "6817:22"
     depends_on:
       - "slurmdbd"
     networks:
@@ -83,6 +84,29 @@ services:
       - "slurmctld"
     networks:
       - slurmnet
+  
+  jupyter-server:
+    image: jupyterhub
+    hostname: jupyterhub
+    container_name: jupyterhub 
+    command:
+      - jupyterhub
+    volumes:
+      - ./notebook-data:/home/sirily11
+      - ./config:/srv/jupyterhub
+    ports:
+      - 8083:8083
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    stdin_open: true
+    tty: true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 10m
+        max-file: "3"
+        labels: "production_status"
+        env: "os"
 
 volumes:
   etc_munge:

@@ -9,6 +9,7 @@ LABEL org.opencontainers.image.source="https://github.com/giovtorres/slurm-docke
 ARG SLURM_TAG=slurm-19-05-1-2
 ARG GOSU_VERSION=1.11
 
+#Installing SLURM
 RUN set -ex \
     && yum makecache fast \
     && yum -y update \
@@ -34,6 +35,7 @@ RUN set -ex \
        psmisc \
        bash-completion \
        vim-enhanced \
+       openmpi-devel \
     && yum clean all \
     && rm -rf /var/cache/yum
     
@@ -90,14 +92,54 @@ COPY slurmdbd.conf /etc/slurm/slurmdbd.conf
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
+#Installing SSH
 RUN yum -y update; yum clean all
 RUN yum -y install openssh-server passwd; yum clean all
 ADD ./start.sh /start.sh
 RUN mkdir /var/run/sshd
 
-RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' 
+RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
 
 RUN chmod 755 /start.sh
 EXPOSE 22
 RUN ./start.sh
+
+# Install Singularity
+RUN yum update -y && \
+    yum groupinstall -y 'Development Tools' && \
+    yum install -y \
+    build-essential \
+    libssl-dev \
+    uuid-dev \
+    libgpgme11-dev \
+    squashfs-tools \
+    libseccomp-dev \
+    wget \
+    pkg-config \
+    procps
+
+# Download Go source version 1.16.3, install them and modify the PATH
+ENV VERSION=1.16.3 
+ENV OS=linux 
+ENV ARCH=amd64
+RUN wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz && \
+tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz && \
+rm go$VERSION.$OS-$ARCH.tar.gz && \
+echo 'export PATH=$PATH:/usr/local/go/bin' | tee -a /etc/profile
+
+# Download Singularity from version 3.7.3 (security version)
+ENV VERSION=3.7.3
+RUN wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz && \
+tar -xzf singularity-${VERSION}.tar.gz
+
+
+# Compile Singularity sources and install it
+
+
+RUN export PATH=$PATH:/usr/local/go/bin && \
+cd singularity && \
+./mconfig --without-suid && \
+make -C ./builddir && \
+make -C ./builddir install
+
 ENTRYPOINT ["/usr/sbin/sshd", "-D"]

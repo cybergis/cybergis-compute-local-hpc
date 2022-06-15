@@ -1,30 +1,62 @@
-version: "3"
+# Copyright (c) Jupyter Development Team.
+# Distributed under the terms of the Modified BSD License.
+
+# JupyterHub docker-compose configuration file
+version: "2"
 
 services:
-  job_supervisor:
-    image: zimoxiao/job_supervisor:latest
-    restart: on-failure
+  # hub-db:
+  #   image: postgres:9.5
+  #   container_name: jupyterhub-db
+  #   restart: always
+  #   environment:
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     PGDATA: ${DB_VOLUME_CONTAINER}
+  #   env_file:
+  #     - secrets/postgres.env
+  #   volumes:
+      # - "db:${DB_VOLUME_CONTAINER}"
+
+  hub:
+    # depends_on:
+    #   - hub-db
+    restart: always
+    image: alexandermichels/dummy-jupyterhub:0.0.1
+    container_name: jupyterhub
     volumes:
-    - ../:/job_supervisor:rw
-    command: ["/job_supervisor/docker/docker-entrypoint.sh"]
-    privileged: true
+      # Bind Docker socket on the host so we can connect to the daemon from
+      # within the container
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+      # # Bind Docker volume on host for JupyterHub database and cookie secrets
+      # - "data:${DATA_VOLUME_CONTAINER}"
     ports:
-      - "3030:3030"
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=0
+      - "443:443"
+    # links:
+    #   - hub-db
     environment:
-      OPENCONNECT_PASSWORD: ${OPENCONNECT_PASSWORD}
-      OPENCONNECT_USER: ${OPENCONNECT_USER}
-      OPENCONNECT_AUTHGROUP: ${OPENCONNECT_AUTHGROUP}
-      OPENCONNECT_URL: ${OPENCONNECT_URL}
-      OPENCONNECT_MFA_CODE: ${OPENCONNECT_MFA_CODE}
-    networks:
-      - supervisornet
-
-volumes:
-  mysql_volume:
-
-networks:
-  supervisornet:
-    external:
-      name: custom_network
+      # All containers will join this network
+      DOCKER_NETWORK_NAME: custom-network
+      # JupyterHub will spawn this Notebook image for users
+      DOCKER_NOTEBOOK_IMAGE: jupyter/scipy-notebook:latest
+      # Notebook directory inside user image
+      # normally you mount a volume here, but since
+      # this is a simple instance just pass in any
+      # path that already exists
+      DOCKER_NOTEBOOK_DIR: /home/jovyan
+      # Using this run command (optional)
+      DOCKER_SPAWN_CMD: start-singleuser.sh
+      # Postgres db info
+    #   POSTGRES_DB: ${POSTGRES_DB}
+    #   POSTGRES_HOST: hub-db
+    # env_file:
+    #   - secrets/postgres.env
+    #   - secrets/oauth.env
+    command: >
+      jupyterhub -f /srv/jupyterhub/jupyterhub_config.py
+# volumes:
+#   data:
+#     external:
+#       name: ${DATA_VOLUME_HOST}
+#   db:
+#     external:
+#       name: ${DB_VOLUME_HOST}

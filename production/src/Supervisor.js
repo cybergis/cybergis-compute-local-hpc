@@ -196,9 +196,10 @@ var Supervisor = (function () {
                     case 3:
                         _a.sent();
                         _a.label = 4;
-                    case 4: return [4, ssh.connection.execCommand('echo')];
+                    case 4: return [4, ssh.connection.execCommand('sbatch --wrap="uptime"')];
                     case 5:
                         _a.sent();
+                        this.emitter.registerEvents(job, 'JOB_REGISTERED', 'SSH Connection is working');
                         if (!job.maintainerInstance.isInit) return [3, 7];
                         return [4, job.maintainerInstance.maintain()];
                     case 6:

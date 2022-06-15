@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "---> Starting the echo"
+/usr/sbin/sshd
 set -e
 if [ "$1" = "slurmdbd" ]
 then

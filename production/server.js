@@ -828,7 +828,7 @@ app.post('/job', function (req, res) {
                     jobRepo = connection.getRepository(Job_1.Job);
                     job = new Job_1.Job();
                     job.id = guard.generateID();
-                    job.userId = res.locals.username ? res.locals.username : null;
+                    job.userId = res.locals.username ? res.locals.username : "fake@user";
                     _b = job;
                     return [4, guard.issueJobSecretToken()];
                 case 9:
@@ -927,7 +927,7 @@ app.post('/job/:jobId/submit', function (req, res) {
                         res.status(402);
                         return [2];
                     }
-                    if (!res.locals.username) {
+                    if (!res.locals.username && !config_1.config.is_testing) {
                         res.json({ error: "submit without login is not allowed", messages: [] });
                         res.status(401);
                         return [2];
@@ -957,36 +957,34 @@ app.post('/job/:jobId/submit', function (req, res) {
                     }
                     _a.label = 5;
                 case 5:
-                    _a.trys.push([5, 10, , 11]);
+                    _a.trys.push([5, 11, , 12]);
+                    if (!!config_1.config.is_testing) return [3, 7];
                     return [4, JobUtil_1.default.validateJob(job, res.locals.host, res.locals.username.split('@')[0])];
                 case 6:
                     _a.sent();
-                    return [4, supervisor.pushJobToQueue(job)];
-                case 7:
+                    _a.label = 7;
+                case 7: return [4, supervisor.pushJobToQueue(job)];
+                case 8:
                     _a.sent();
                     return [4, db.connect()];
-                case 8:
+                case 9:
                     connection = _a.sent();
                     job.queuedAt = new Date();
                     updateJobTo = { queuedAt: job.queuedAt };
-                    if (job.hpc == 'instant_hpc') {
-                        updateJobTo.finishedAt = new Date();
-                        updateJobTo.isFailed = false;
-                    }
                     return [4, connection.createQueryBuilder()
                             .update(Job_1.Job)
                             .where('id = :id', { id: job.id })
                             .set(updateJobTo)
                             .execute()];
-                case 9:
-                    _a.sent();
-                    return [3, 11];
                 case 10:
+                    _a.sent();
+                    return [3, 12];
+                case 11:
                     e_15 = _a.sent();
                     res.json({ error: e_15.toString() });
                     res.status(402);
                     return [2];
-                case 11:
+                case 12:
                     res.json(Helper_1.default.job2object(job));
                     return [2];
             }

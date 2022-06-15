@@ -146,7 +146,8 @@ class Supervisor {
             // connect ssh & run
             try {
                 if (!ssh.connection.isConnected()) await ssh.connection.connect(ssh.config)
-                await ssh.connection.execCommand('echo') // test connection
+                await ssh.connection.execCommand('sbatch --wrap="uptime"') // test connection
+                this.emitter.registerEvents(job, 'JOB_REGISTERED', 'SSH Connection is working')
                 if (job.maintainerInstance.isInit) {
                     await job.maintainerInstance.maintain()
                 } else {
