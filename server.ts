@@ -212,11 +212,11 @@ app.get('/user', (req, res) => {
         return
     }
 
-    // if (!res.locals.username) {
-    //     res.json({ error: "invalid token" })
-    //     res.status(402)
-    //     return
-    // }
+    if (!res.locals.username) {
+        res.json({ error: "invalid token" })
+        res.status(402)
+        return
+    }
     res.json({ username: res.locals.username })
 })
 
