@@ -256,11 +256,6 @@ app.get('/user', function (req, res) {
         res.status(402);
         return;
     }
-    if (!res.locals.username) {
-        res.json({ error: "invalid token" });
-        res.status(402);
-        return;
-    }
     res.json({ username: res.locals.username });
 });
 app.get('/user/jupyter-globus', function (req, res) {
