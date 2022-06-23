@@ -1,0 +1,10 @@
+INFO:    Converting SIF file to temporary sandbox...
+FATAL:   while extracting /home/user/simages/python.sif: root filesystem extraction failed: extract command failed: [91mERROR  : Failed to create user namespace: not allowed to create user namespace
+[0m: exit status 1
+INFO:    Converting SIF file to temporary sandbox...
+FATAL:   while extracting /home/user/simages/python.sif: root filesystem extraction failed: extract command failed: [91mERROR  : Failed to create user namespace: not allowed to create user namespace
+[0m: exit status 1
+srun: error: c1: task 0: Exited with exit code 255
+INFO:    Converting SIF file to temporary sandbox...
+FATAL:   while extracting /home/user/simages/python.sif: root filesystem extraction failed: extract command failed: [91mERROR  : Failed to create user namespace: not allowed to create user namespace
+[0m: exit status 1

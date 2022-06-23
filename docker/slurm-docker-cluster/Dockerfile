@@ -135,7 +135,6 @@ tar -xzf singularity-${VERSION}.tar.gz
 
 # Compile Singularity sources and install it
 
-
 RUN export PATH=$PATH:/usr/local/go/bin && \
 cd singularity && \
 ./mconfig --without-suid && \

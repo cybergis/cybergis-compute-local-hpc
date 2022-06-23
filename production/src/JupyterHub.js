@@ -45,24 +45,41 @@ var JupyterHub = (function () {
     }
     JupyterHub.prototype.getUsername = function (token) {
         return __awaiter(this, void 0, void 0, function () {
-            var t, res, e_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var t, protocols, user, _a, _b, _i, i, protocol, res, err_1;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         t = this._decodeToken(token);
-                        _a.label = 1;
+                        protocols = ['https', 'http'];
+                        user = undefined;
+                        _a = [];
+                        for (_b in protocols)
+                            _a.push(_b);
+                        _i = 0;
+                        _c.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        return [4, axios_1.default.get("https://".concat(path.join(t.host, this.basePath, '/user')), {
+                        if (!(_i < _a.length)) return [3, 6];
+                        i = _a[_i];
+                        console.log(t);
+                        protocol = protocols[i];
+                        _c.label = 2;
+                    case 2:
+                        _c.trys.push([2, 4, , 5]);
+                        return [4, axios_1.default.get("".concat(protocol, "://").concat(path.join(t.host, this.basePath, '/user')), {
                                 headers: { 'Authorization': "token ".concat(t.token) }
                             })];
-                    case 2:
-                        res = _a.sent();
-                        return [2, "".concat(res.data.name, "@").concat(t.host)];
                     case 3:
-                        e_1 = _a.sent();
-                        return [2, undefined];
-                    case 4: return [2];
+                        res = _c.sent();
+                        user = "".concat(res.data.name, "@").concat(t.host);
+                        return [3, 6];
+                    case 4:
+                        err_1 = _c.sent();
+                        console.log(err_1);
+                        return [3, 5];
+                    case 5:
+                        _i++;
+                        return [3, 1];
+                    case 6: return [2, user];
                 }
             });
         });
