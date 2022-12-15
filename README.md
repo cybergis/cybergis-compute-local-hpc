@@ -13,25 +13,7 @@ A scalable middleware framework for enabling high-performance and data-intensive
 - CyberGIS Compute Core: middleware server that automates job submission to HPC.
 - CyberberGIS Compute Python SDK: interactive client for Jupyter Notebook with code-less UI support.
 - Contribution: developer API that enables model contribution with little to no modification for existing code.
-
-## Supported Git Projects
-| Name                                  | URL                                                                              |
-|---------------------------------------|----------------------------------------------------------------------------------|
-| hello_world                           | https://github.com/cybergis/cybergis-compute-hello-world.git                     |
-| summa3                                | https://github.com/cybergis/cybergis-compute-v2-summa.git                        |
-| wrfhydro-5.x                          | https://github.com/cybergis/cybergis-compute-v2-wrfhydro.git                     |
-| uncertainty_in_spatial_accessibility  | https://github.com/JinwooParkGeographer/Uncertainty-in-Spatial-Accessibility.git |
-| mpi_hello_world                       | https://github.com/cybergis/cybergis-compute-mpi-helloworld.git                  |
-| data_fusion                           | https://github.com/CarnivalBug/data_fusion.git                                   |
-> If you'd like to add your Git project to our supported list, please contact xxx@illinois.edu
-
-## Supported HPC & Computing Resources
-
-| Name                      | Code              | Description                                                                                      |
-|---------------------------|-------------------|--------------------------------------------------------------------------------------------------|
-| Keeling Computing Cluster | keeling_community | University of Illinois HPC for enabling geospatial research and education at the CyberGIS Center |
-| Bridges-2                 | bridges_community | Pittsburgh Supercomputing Center HPC                                                             |
-| XSEDE Expanse             | expanse_community | San Diego Supercomputer Center                                                                   |
+- Supported Git Projects: https://cybergis.github.io/cybergis-compute-python-sdk/models.html
 
 ## Server Setup
 1. External Software Installations
@@ -77,48 +59,25 @@ A scalable middleware framework for enabling high-performance and data-intensive
 
 5. The server is initialized using bash scripts. These bash scripts use docker compose to to run all of the containers. **Run these scripts from the root of your repo.**
 
-    - General Development on HPC
+  - Running the server
     ```bash
-    # for general development
     # - run in foreground with log output
     ./script/develop-start-local.sh
     # - run in background, add -b background failing
     ./script/develop-start-local.sh -b
-    # - some HPC requires university network
-    # - to connect to a University VPN, add the AnyConnect options
-    ./script/develop-start-local.sh -l vpn.cites.illinois.edu -u NetID -p "password" -g 5_SplitTunnel_NoPrivate
     ```
-
-    - Local Development
-        - Running the server
-        ```bash
-        # - run in foreground with log output
-        ./script/develop-start-local.sh
-        # - run in background, add -b background failing
-        ./script/develop-start-local.sh -b
-        ```
-        - Checking that server is working alright. Make sure you allow 5 minutes for the server to fully initialize.
-        ```bash
-        # Fire up a new terminal and type
-        docker container ls
-        ```
-        The output should be similar to 
-        ![alt text](images/container_running.png "Running Containers")
-    
-        After all of the containers have started, run `bash script/setup_keys.sh` to configure passwordless SSH between the jobsupervisor and SLURM cluster.
-
-
-    - Production Deployment
+    - Checking that server is working alright. Make sure you allow 5 minutes for the server to fully initialize.
     ```bash
-    # for production server only
-    ./script/production-start.sh
+    # Fire up a new terminal and type
+    docker container ls
     ```
+    The output should be similar to 
+    ![alt text](images/container_running.png "Running Containers")
 
-6. Stop all running containers
+    After all of the containers have started, run `bash script/setup_keys.sh` to configure passwordless SSH between the jobsupervisor and SLURM cluster.
+
+    - Stop all running containers
     ```bash
-    # general deployment
-    ./script/stop.sh
-    # local deployment
     ./script/stop-local.sh
     ```
 
