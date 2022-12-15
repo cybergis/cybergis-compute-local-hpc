@@ -20,8 +20,19 @@ then
 fi
 
 echo "copying config files..."
-cp -i ./config.example.json ./config.json
-cp -i ./configs/hpc.example.json ./configs/hpc.json
-cp -i ./configs/maintainer.example.json ./configs/maintainer.json
-cp -i ./configs/jupyter-globus-map.example.json ./configs/jupyter-globus-map.json
-cp -i ./configs/container.example.json ./configs/container.json
+cp ./configs/config.example.json ./cybergis-compute-core/config.json
+cp ./configs/hpc.example.json ./cybergis-compute-core/configs/hpc.json
+cp ./configs/maintainer.example.json ./cybergis-compute-core/configs/maintainer.json
+cp ./configs/jupyter-globus-map.example.json ./cybergis-compute-core/configs/jupyter-globus-map.json
+cp ./configs/container.example.json ./cybergis-compute-core/configs/container.json
+
+echo "Setting up the keys..."
+mkdir -p ./cybergis-compute-core/keys
+ssh-keygen -t rsa -f ./cybergis-compute-core/keys/id_rsa -q -N ""
+chmod -R 777 ./cybergis-compute-core/keys
+mkdir -p ./local_hpc/ssh/
+cat ./cybergis-compute-core/keys/id_rsa.pub >> ./local_hpc/ssh/authorized_keys
+mkdir -p cybergis-compute-core/local_hpc
+cp -r local_hpc cybergis-compute-core/local_hpc
+mkdir -p cybergis-compute-core/examples
+cp -r examples cybergis-compute-core/examples

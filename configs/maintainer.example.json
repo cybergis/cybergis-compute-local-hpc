@@ -1,6 +1,6 @@
 {
     "hello_world_singularity": {
-        "hpc": ["keeling_community"],
+        "hpc": ["local_hpc","keeling_community"],
         "default_hpc": "keeling_community",
         "job_pool_capacity": 5,
         "executable_folder": {

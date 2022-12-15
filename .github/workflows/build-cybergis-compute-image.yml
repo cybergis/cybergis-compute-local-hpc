@@ -23,4 +23,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: zimoxiao/job_supervisor:latest
+          tags: alexandermichels/cybergis-compute-core:latest

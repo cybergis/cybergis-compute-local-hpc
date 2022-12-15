@@ -1,0 +1,3 @@
+[submodule "cybergis-compute-core"]
+	path = cybergis-compute-core
+	url = https://github.com/cybergis/cybergis-compute-core.git

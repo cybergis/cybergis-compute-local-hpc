@@ -54,7 +54,7 @@
         ],
         "xsede_job_log_credential": {
             "xsederesourcename": "expanse.sdsc.xsede.org",
-            "apikey": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            "apikey": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
         }
     },
     "bridges_community_gpu": {
@@ -77,30 +77,54 @@
             "root_path": "/jet/home/cybergis/data"
         },
         "init_sbatch_options": [
-            "#SBATCH --partition=GPU"
+            "#SBATCH --partition=GPU-shared"
         ]
     },
-    "instant_hpc": {
-        "ip": "bridges2.psc.edu",
+    "anvil_community": {
+        "ip": "anvil.rcac.purdue.edu",
         "port": 22,
         "is_community_account": true,
         "community_login": {
-            "user": "cybergis",
+            "user": "x-cybergis",
             "use_local_key": false,
             "external_key": {
                 "private_key_path": "/job_supervisor/keys/cigi-gisolve.key",
                 "passphrase": null
             }
         },
-        "root_path": "/jet/home/cybergis/data",
+        "root_path": "/anvil/scratch/x-cybergis/compute/",
         "job_pool_capacity": 10,
         "globus": {
             "identity": "apadmana@illinois.edu",
-            "endpoint": "8e5f3a0a-542d-11eb-a45a-0e095b4c2e55",
-            "root_path": "/jet/home/cybergis/data"
+            "endpoint": "4fb6aabc-a900-4ca1-ad62-b33fee950930",
+            "root_path": "/"
+        },
+        "init_sbatch_script": [
+            "module load gcc",
+            "module load openmpi"
+        ],
+        "init_sbatch_options": [
+            "#SBATCH --partition=shared",
+            "#SBATCH --nodes=1"
+        ]
+    },
+    "local_hpc": {
+        "ip": "slurmctld",
+        "port": 22,
+        "is_community_account": true,
+        "community_login": {
+            "user": "user",
+            "use_local_key": false,
+            "external_key": {
+                "private_key_path": "/job_supervisor/keys/id_rsa",
+                "passphrase": ""
+            }
+        },
+        "root_path": "/home/user",
+        "job_pool_capacity": 10,
+        "globus": {
         },
         "init_sbatch_options": [
-            "#SBATCH --partition=GPU-shared"
         ]
     }
 }
