@@ -33,6 +33,6 @@ chmod -R 777 ./cybergis-compute-core/keys
 mkdir -p ./local_hpc/ssh/
 cat ./cybergis-compute-core/keys/id_rsa.pub >> ./local_hpc/ssh/authorized_keys
 mkdir -p cybergis-compute-core/local_hpc
-cp -r local_hpc cybergis-compute-core/local_hpc
+cp -r local_hpc cybergis-compute-core
 mkdir -p cybergis-compute-core/examples
-cp -r examples cybergis-compute-core/examples
+cp -r examples cybergis-compute-core

@@ -123,6 +123,9 @@
         "root_path": "/home/user",
         "job_pool_capacity": 10,
         "globus": {
+            "identity": "apadmana@illinois.edu",
+            "endpoint": "4fb6aabc-a900-4ca1-ad62-b33fee950930",
+            "root_path": "/home/user"
         },
         "init_sbatch_options": [
         ]
