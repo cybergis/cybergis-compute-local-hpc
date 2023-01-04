@@ -35,7 +35,7 @@ A scalable middleware framework for enabling high-performance and data-intensive
     cd ..
     ```
     
-3. Checking core configurations. Refer to [link](#-Configurations). This step may require sudo permissions (`sudo ./script/init.sh` or run as root.)
+3. Checking core configurations. Refer to [link](##-Configurations). This step may require sudo permissions (`sudo ./script/init.sh` or run as root.)
     ```bash
     # Check the configs in configs/ folder and if everything looks good run init script
     ./script/init.sh
