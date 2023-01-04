@@ -26,10 +26,13 @@ A scalable middleware framework for enabling high-performance and data-intensive
     ```bash
     #pull docker images
     docker pull jupyter/scipy-notebook:latest && docker pull alexandermichels/dummy-jupyterhub:0.0.2 && docker pull mitak2/slurm-docker-cluster:19.05.1 && docker pull mysql:5.7 && docker pull alexandermichels/cybergis-compute-core:latest && docker pull cybergisx/cybergisx:0.9.1
-    git clone https://github.com/cybergis/cybergis-compute-local_hpc.git --recursive
+    git clone https://github.com/cybergis/cybergis-compute-local_hpc.git
+    cd cybergis-compute-local_hpc
+    git clone https://github.com/cybergis/cybergis-compute-core.git
     cd cybergis-compute-core
     # Install npm packages
     npm install && npm run build
+    cd ..
     ```
     
 3. Checking core configurations. Refer to [link](#-Configurations). This step may require sudo permissions (`sudo ./script/init.sh` or run as root.)
