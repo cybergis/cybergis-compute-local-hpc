@@ -41,7 +41,7 @@ A scalable middleware framework for enabling high-performance and data-intensive
     ./script/init.sh
     ```
 
-3. Configure hpc parameters (Not required for Local HPC setup)
+4. Configure hpc parameters (Not required for Local HPC setup)
    - config.json
      - `local_key`
        - `private_key_path`
@@ -51,7 +51,7 @@ A scalable middleware framework for enabling high-performance and data-intensive
        - `private_key_path`
        - `passphrase` (if required)
 
-4. Load relevant singularity image container
+5. Load relevant singularity image container
 ```bash
     mkdir -p local_hpc/user && cd local_hpc/user
     mkdir simages
@@ -60,7 +60,7 @@ A scalable middleware framework for enabling high-performance and data-intensive
     scp {enter your keeling id here}@keeling.earth.illinois.edu:/data/keeling/a/cigi-gisolve/simages/python.sif python.sif
 ```
 
-5. The server is initialized using bash scripts. These bash scripts use docker compose to to run all of the containers. **Run these scripts from the root of your repo.**
+6. The server is initialized using bash scripts. These bash scripts use docker compose to to run all of the containers. **Run these scripts from the root of your repo.**
 
   - Running the server
     ```bash
@@ -69,7 +69,7 @@ A scalable middleware framework for enabling high-performance and data-intensive
     # - run in background, add -b background failing
     ./script/develop-start-local.sh -b
     ```
-    - Checking that server is working alright. Make sure you allow 5 minutes for the server to fully initialize.
+  - Checking that server is working alright. Make sure you allow 5 minutes for the server to fully initialize.
     ```bash
     # Fire up a new terminal and type
     docker container ls
@@ -77,9 +77,12 @@ A scalable middleware framework for enabling high-performance and data-intensive
     The output should be similar to 
     ![alt text](images/container_running.png "Running Containers")
 
-    After all of the containers have started, run `bash script/setup_keys.sh` to configure passwordless SSH between the jobsupervisor and SLURM cluster.
-
-    - Stop all running containers
+  - Configuring passwordless SSH between the jobsupervisor and SLURM cluster
+    ```bash
+    ./script/setup_keys.sh
+    ```
+ 
+  - Stop all running containers
     ```bash
     ./script/stop-local.sh
     ```
